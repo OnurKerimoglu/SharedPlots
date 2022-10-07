@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- To have d3 funcionality on the page -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <!-- Custom style -->
+    <!-- <link rel="stylesheet" type "text/css" href="css/myStyle.css">   -->
+</head>
+
+
+<body>
+    <div>
+        <h1>Random Clusters</h1>
+        <p>Some text</p>
+
+        <svg width="500px" height="500px" style="background:yellow;"></svg>
+
+        <script>
+        d3.csv("https://raw.githubusercontent.com/chumo/Data2Serve/master/transition_clusters.csv",d3.autoType)
+            .then(function(data){
+            
+            // only for the first point (first row)
+            // p1 = data[0];
+            // var mySVG = d3.select("svg")
+            // mySVG.append("circle")
+            // .attr("cx", p1.Xi).attr("cy", p1.Yi).attr("r", 10).attr("fill",p1.color)
+            // d3.select("circle").transition().duration(2000).ease(d3.easeSin)
+            // .attr('cx',p1.Xf).attr('cy',p1.Yf)
+
+            var mySVG = d3.select("svg")
+            var circles = mySVG.selectAll("circle").data(data);
+            
+            // Initiate and do the transition in one call
+            circles.join("circle").attr("r", 5)
+            .attr("cx", function(data){return data.Xi;})
+            .attr("cy", function(data){return data.Yi;})
+            .attr("fill", function(data){return data.color;})
+            .transition().duration(2000).ease(d3.easeSin)
+            .attr('cx',function(data){return data.Xf;})
+            .attr('cy',function(data){return data.Yf;})
+            
+            // change radius on mouse click
+            d3.selectAll("circle")
+                .on("mouseover", function(event){d3.select(this).attr('r',20)})
+            d3.selectAll("circle")
+                .on("mouseleave",function(event){d3.select(this).attr('r',5)})
+        })
+        </script>
+        
+    </div>
+</body>
